@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Chagrita - Comida Artesanal para Pedir</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins for body, Titan One for headers -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Titan+One&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* --- THEME VARIABLES (Light & Dark Mode) --- */
+        :root {
+            --bg-primary: #FEFBF6;
+            --bg-secondary: #FFFFFF;
+            --bg-footer: #111827;
+            --text-primary: #4B5563;
+            --text-secondary: #111827;
+            --text-inverted: #FFFFFF;
+            --text-subtle: #6B7280;
+            --header-color: #78350F;
+            --accent-color: #f97316;
+            --accent-hover: #ea580c;
+            --card-border-hover: #f97316;
+            --btn-details-bg: #e5e7eb;
+            --btn-details-text: #374151;
+            --btn-details-hover: #d1d5db;
+        }
+
+        html.dark {
+            --bg-primary: #1f2937;
+            --bg-secondary: #374151;
+            --bg-footer: #111827;
+            --text-primary: #d1d5db;
+            --text-secondary: #f9fafb;
+            --text-inverted: #FFFFFF;
+            --text-subtle: #9ca3af;
+            --header-color: #f97316;
+            --accent-color: #fb923c;
+            --accent-hover: #f97316;
+            --card-border-hover: #fb923c;
+            --btn-details-bg: #4b5563;
+            --btn-details-text: #f9fafb;
+            --btn-details-hover: #6b7280;
+        }
+
+        /* --- BASE STYLES --- */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .font-display {
+            font-family: 'Titan One', cursive;
+            letter-spacing: 1px;
+        }
+        
+        h2.font-display, h3.font-display {
+             color: var(--header-color);
+        }
+        
+        /* --- HERO & FOOTER --- */
+        #hero-gallery { position: relative; overflow: hidden; }
+        .hero-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; background-attachment: fixed; opacity: 0; transition: opacity 1.5s ease-in-out; z-index: 1; }
+        .hero-slide.active { opacity: 1; }
+        .hero-content { position: relative; z-index: 2; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)); }
+        footer { background-color: var(--bg-footer); color: var(--text-inverted); }
+
+        /* --- BUTTONS --- */
+        @keyframes pulse-animation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: 700; padding: 1rem 2.5rem; border-radius: 9999px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transition: all 300ms;
+            animation: pulse-animation 2.5s infinite;
+        }
+        .btn-primary:hover { background-color: var(--accent-hover); }
+
+        .btn-secondary {
+            background-color: var(--header-color);
+            color: white; font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 300ms;
+        }
+        .btn-secondary:hover { background-color: var(--accent-hover); }
+        .btn-secondary.active {
+             background-color: var(--accent-color);
+             color: white; outline: 2px solid white; outline-offset: 2px;
+        }
+
+        .btn-add-to-cart {
+            background-color: #fcd34d; color: #78350f; font-weight: 700;
+            padding: 0.5rem 1rem; border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 200ms;
+        }
+        .btn-add-to-cart:hover { background-color: #fde68a; transform: scale(1.1); }
+        
+        .btn-details {
+            background-color: var(--btn-details-bg);
+            color: var(--btn-details-text);
+            font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.5rem;
+            transition: all 200ms;
+        }
+        .btn-details:hover { background-color: var(--btn-details-hover); }
+
+        .price-color { color: var(--accent-color); }
+        .sidebar-accent-hover:hover { color: var(--accent-color); }
+        .text-subtle { color: var(--text-subtle); }
+
+        /* --- COMPONENTS --- */
+        .card {
+            background-color: var(--bg-secondary);
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 300ms, border-color 300ms, background-color 0.3s;
+            border: 4px solid transparent;
+        }
+        .card:hover { transform: translateY(-0.5rem); border-color: var(--card-border-hover); }
+        
+        .floating-btn {
+            position: fixed; background-color: var(--accent-color); color: white;
+            width: 4rem; height: 4rem; border-radius: 9999px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            cursor: pointer; z-index: 50;
+            transform: scale(1); opacity: 1;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out, background-color 0.3s;
+        }
+        .floating-btn:hover { background-color: var(--accent-hover); }
+        #cart-button { bottom: 1.5rem; right: 1.5rem; }
+        #whatsapp-chat-button { bottom: 1.5rem; left: 1.5rem; background-color: #25D366; }
+        #whatsapp-chat-button:hover { background-color: #128C7E; }
+        
+        .cart-icon.hidden { transform: scale(0); opacity: 0; pointer-events: none; }
+        .cart-count {
+            position: absolute; top: -0.5rem; right: -0.5rem; background-color: #dc2626;
+            color: white; font-size: 0.75rem; font-weight: 700; width: 1.5rem; height: 1.5rem;
+            border-radius: 9999px; display: flex; align-items: center; justify-content: center;
+            border: 2px solid white;
+        }
+        .modal-content {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        .modal-input {
+            background-color: var(--bg-primary);
+            border-color: var(--text-subtle);
+            color: var(--text-primary);
+        }
+        .modal-input:focus {
+            --tw-ring-color: var(--accent-color);
+        }
+
+        .modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .menu-item { animation: fadeIn 0.5s ease-in-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #sidebar-menu { transition: transform 0.3s ease-in-out; }
+        
+        #theme-toggle-btn {
+            position: fixed; top: 1rem; right: 1rem; z-index: 50;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 0.75rem; border-radius: 9999px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .fa-sun { display: none; }
+        html.dark .fa-sun { display: inline-block; }
+        html.dark .fa-moon { display: none; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Sidebar & Theme Toggle Buttons -->
+    <button id="menu-toggle-btn" class="fixed top-4 left-4 z-50 bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg text-gray-800">
+        <i class="fas fa-bars text-xl"></i>
+    </button>
+    <button id="theme-toggle-btn">
+        <i class="fas fa-moon text-xl"></i>
+        <i class="fas fa-sun text-xl"></i>
+    </button>
+
+    <!-- Sidebar Menu -->
+    <div id="sidebar-menu" class="fixed top-0 left-0 h-full w-64 bg-gray-900 text-white p-6 z-50 transform -translate-x-full flex flex-col">
+        <a href="#home" class="sidebar-link mb-8 text-center">
+            <img src="images/LogoChagrita.png" alt="Logo Mi Chagrita" class="mx-auto rounded-lg">
+        </a>
+        <nav class="flex-grow">
+            <ul>
+                <li class="mb-4"><a href="#home" class="sidebar-link text-lg sidebar-accent-hover flex items-center"><i class="fas fa-home w-6 mr-3"></i>Inicio</a></li>
+                <li class="mb-4"><a href="#about" class="sidebar-link text-lg sidebar-accent-hover flex items-center"><i class="fas fa-info-circle w-6 mr-3"></i>Nosotros</a></li>
+                <li class="mb-4"><a href="#menu" class="sidebar-link text-lg sidebar-accent-hover flex items-center"><i class="fas fa-utensils w-6 mr-3"></i>Menú</a></li>
+            </ul>
+        </nav>
+        <button id="close-sidebar-btn" class="absolute top-4 right-4 text-2xl">&times;</button>
+    </div>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-40 hidden"></div>
+
+    <!-- Header -->
+    <header id="home" class="text-white">
+        <div id="hero-gallery">
+            <div class="hero-slide active" style="background-image: url('images/MiChagritaBack.png');"></div>
+            <div class="hero-slide" style="background-image: url('images/pizza1.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('images/pizza2.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('images/pizza3.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('images/pizza4.jpg');"></div>
+            
+            <div class="hero-content">
+                <div class="container mx-auto px-6 py-20 md:py-32 text-center">
+                    <h1 class="font-display text-5xl md:text-7xl leading-tight tracking-tight mb-4 text-white drop-shadow-lg">
+                        El Sabor Artesanal de Chía
+                    </h1>
+                    <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-gray-200">
+                        ¡Pide con nosotros y no te arrepentirás!
+                    </p>
+                    <a href="#menu" class="btn-primary text-xl">
+                        <i class="fas fa-utensils mr-2"></i> Ver Menú
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+        <section id="about" class="text-center mb-16 pt-16 -mt-16">
+            <h2 class="font-display text-4xl mb-4">Nuestra Filosofía</h2>
+            <p class="max-w-3xl mx-auto text-lg">
+                En <span class="font-bold">MI CHAGRITA</span> queremos ofrecer una experiencia placentera y satisfactoria. Cada plato se prepara con amor, ingredientes frescos y ese toque casero que nos hace únicos.
+            </p>
+        </section>
+
+        <section id="menu" class="pt-16 -mt-16">
+            <h2 class="font-display text-4xl text-center mb-2">Nuestro Menú</h2>
+            <p class="text-center text-subtle mb-8">Haz clic en "Agregar" para armar tu pedido.</p>
+            
+            <div id="menu-filters" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-10">
+                <button class="btn-secondary filter-btn" data-filter="all">Todos</button>
+                <button class="btn-secondary filter-btn" data-filter="pizzas">Pizzas</button>
+                <button class="btn-secondary filter-btn" data-filter="hamburguesas">Hamburguesas</button>
+                <button class="btn-secondary filter-btn" data-filter="perros">Perros Calientes</button>
+                <button class="btn-secondary filter-btn" data-filter="otros">Otros Antojos</button>
+            </div>
+
+            <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container mx-auto px-6 text-center py-10">
+            <img src="images/LogoChagrita.png" alt="Logo Mi Chagrita" class="mx-auto mb-4 h-20 w-auto">
+            <p class="mb-4">Comida Artesanal en Chía, Colombia</p>
+            <div class="mb-4">
+                <i class="fas fa-clock mr-2"></i>
+                <span><strong>Horario:</strong> Martes a Domingo, 5:00 PM - 10:00 PM</span>
+            </div>
+            <div class="flex justify-center space-x-6 text-3xl">
+                <a href="https://www.facebook.com/profile.php?id=61558043636464&sk=about_life_events" target="_blank" class="hover:text-orange-400 transition-colors" aria-label="Facebook"><i class="fab fa-facebook-square"></i></a>
+                <a href="https://www.instagram.com/michagritachia_" target="_blank" class="hover:text-orange-400 transition-colors" aria-label="Instagram"><i class="fab fa-instagram-square"></i></a>
+                <a href="https://api.whatsapp.com/send?phone=573208441327" target="_blank" class="hover:text-orange-400 transition-colors" aria-label="WhatsApp"><i class="fab fa-whatsapp-square"></i></a>
+                <a href="mailto:hugo7666@hotmail.com" class="hover:text-orange-400 transition-colors" aria-label="Email"><i class="fas fa-envelope-square"></i></a>
+            </div>
+            <p class="mt-6 text-sm text-gray-400">&copy; <span id="year"></span> Mi Chagrita. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Floating Buttons -->
+    <div id="cart-button" class="floating-btn cart-icon hidden">
+        <i class="fas fa-shopping-cart text-2xl"></i>
+        <span id="cart-count" class="cart-count">0</span>
+    </div>
+    <a id="whatsapp-chat-button" href="https://api.whatsapp.com/send?phone=573208441327&text=Hola,%20quisiera%20hacer%20una%20consulta." target="_blank" class="floating-btn">
+        <i class="fab fa-whatsapp text-3xl"></i>
+    </a>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 invisible opacity-0">
+        <div class="modal-content w-11/12 md:w-2/3 lg:w-1/2 max-w-2xl rounded-2xl shadow-2xl p-6 md:p-8 transform scale-95 transition-transform duration-300">
+            <div class="flex justify-between items-center border-b pb-4 mb-4">
+                <h2 class="font-display text-3xl">Tu Pedido</h2>
+                <button id="close-cart-btn" class="text-gray-500 hover:text-red-500 text-2xl">&times;</button>
+            </div>
+            <div id="cart-items" class="max-h-64 overflow-y-auto pr-2">
+                <p id="empty-cart-msg" class="text-center py-8">Tu carrito está vacío. ¡Agrega algo del menú!</p>
+            </div>
+            <div id="cart-summary" class="border-t pt-4 mt-4 hidden">
+                <div class="flex justify-between items-center text-xl font-bold">
+                    <span>Total:</span>
+                    <span id="cart-total" class="price-color">$0</span>
+                </div>
+                <p class="text-sm text-subtle mt-2">Ingresa tus datos para finalizar el pedido por WhatsApp.</p>
+                <div class="mt-4 space-y-2">
+                    <input type="text" id="customer-name" placeholder="Tu Nombre" class="modal-input w-full p-2 border rounded-lg focus:ring-2 outline-none">
+                    <input type="text" id="customer-address" placeholder="Tu Dirección de Entrega" class="modal-input w-full p-2 border rounded-lg focus:ring-2 outline-none">
+                    <textarea id="customer-details" placeholder="Detalles de entrega (casa, apto, conjunto, etc.)" rows="2" class="modal-input w-full p-2 border rounded-lg focus:ring-2 outline-none"></textarea>
+                </div>
+                <button id="checkout-btn" class="w-full btn-primary mt-4 text-lg">
+                    <i class="fab fa-whatsapp mr-2"></i> Pedir por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Details Modal -->
+    <div id="details-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 invisible opacity-0">
+        <div class="modal-content w-11/12 md:w-2/3 lg:w-1/2 max-w-2xl rounded-2xl shadow-2xl transform scale-95 transition-transform duration-300">
+            <button id="close-details-btn" class="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-3xl z-10">&times;</button>
+            <div id="details-content" class="flex flex-col md:flex-row">
+                <!-- Content will be set by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- THEME SWITCHER LOGIC ---
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+            const htmlEl = document.documentElement;
+
+            // On page load, check for saved theme or system preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                htmlEl.classList.add(savedTheme);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                htmlEl.classList.add('dark');
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                htmlEl.classList.toggle('dark');
+                localStorage.setItem('theme', htmlEl.classList.contains('dark') ? 'dark' : 'light');
+            });
+
+
+            // --- HERO GALLERY LOGIC ---
+            const slides = document.querySelectorAll('.hero-slide');
+            let currentSlide = 0;
+            setInterval(() => {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }, 5000);
+
+            // --- MENU DATA ---
+            const menuData = [
+                { id: 1, name: 'Pizza Hawaiana', price: 20000, category: 'pizzas', size: 'Personal (22cm)', img: 'images/pizzaHawai.jpg', description: 'La clásica y controversial pizza con jamón y piña. ¡Atrévete a probarla!' },
+                { id: 2, name: 'Pizza Pollo Champiñón', price: 38000, category: 'pizzas', size: 'Mediana (30cm)', img: 'images/pizzaChamp.jpg', description: 'Una combinación perfecta de pollo desmechado y champiñones frescos sobre una base de salsa napolitana y queso mozzarella.' },
+                { id: 3, name: 'Pizza de Carnes', price: 48000, category: 'pizzas', size: 'Familiar (40cm)', img: 'images/pizzaCarnes.jpg', description: 'Para los amantes de la carne: pepperoni, salami, chorizo y tocineta. ¡Una explosión de sabor!' },
+                { id: 4, name: 'Pizza Mexicana', price: 50000, category: 'pizzas', size: 'Familiar (40cm)', img: 'images/pizzaMex.jpg', description: 'Un toque picante con carne molida, jalapeños, aguacate, pico de gallo y nachos. ¡Viva México!' },
+                { id: 5, name: 'Hamburguesa Clásica', price: 25000, category: 'hamburguesas', size: 'En combo', img: 'images/hamburguesaClasica.jpg', description: 'Carne de res artesanal, lechuga, tomate, cebolla y nuestras salsas especiales. Acompañada de papas a la francesa.' },
+                { id: 6, name: 'Hamburguesa con Tocineta', price: 28000, category: 'hamburguesas', size: 'Con aderezos especiales', img: 'images/hamburguesatocineta.jpg', description: 'Nuestra hamburguesa clásica con una generosa porción de tocineta ahumada y queso cheddar.' },
+                { id: 7, name: 'Perro Caliente Clásico', price: 20000, category: 'perros', size: 'Sencillo', img: 'images/perroCalineteClasico.jpg', description: 'Salchicha americana, pan suave, papas trituradas y las salsas que más te gustan.' },
+                { id: 8, name: 'Perro Mexicano', price: 30000, category: 'perros', size: 'Con todo', img: 'images/hotdogMex.jpg', description: 'Un perro caliente con guacamole, pico de gallo, jalapeños y carne desmechada. ¡Una locura de sabor!' },
+                { id: 9, name: 'Salchipapa Sencilla', price: 17000, category: 'otros', size: 'Personal', img: 'images/salchipapas.png', description: 'Papas a la francesa con salchicha en rodajas, acompañadas de salsa rosada y de piña.' },
+                { id: 10, name: 'Tacos x3', price: 20000, category: 'otros', size: '3 unidades', img: 'images/tacos.jpg', description: 'Tres tortillas de maíz rellenas de carne, pollo o mixtas, con cebolla y cilantro.' },
+                { id: 11, name: 'Dorilocos Personales', price: 20000, category: 'otros', size: 'Bolognesa y pico de gallo', img: 'images/dorilocos.jpg', description: 'Una base de Doritos con nuestra salsa bolognesa casera, queso, pico de gallo y un toque de limón.' },
+            ];
+
+            const menuGrid = document.getElementById('menu-grid');
+            const cartButton = document.getElementById('cart-button');
+            const cartModal = document.getElementById('cart-modal');
+            const closeCartBtn = document.getElementById('close-cart-btn');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotalEl = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const emptyCartMsg = document.getElementById('empty-cart-msg');
+            const cartSummary = document.getElementById('cart-summary');
+            
+            const detailsModal = document.getElementById('details-modal');
+            const detailsContent = document.getElementById('details-content');
+            const closeDetailsBtn = document.getElementById('close-details-btn');
+
+            const menuToggleBtn = document.getElementById('menu-toggle-btn');
+            const sidebarMenu = document.getElementById('sidebar-menu');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+            let cart = [];
+
+            // --- SIDEBAR FUNCTIONS ---
+            function openSidebar() { sidebarMenu.classList.remove('-translate-x-full'); sidebarOverlay.classList.remove('hidden'); }
+            function closeSidebar() { sidebarMenu.classList.add('-translate-x-full'); sidebarOverlay.classList.add('hidden'); }
+            menuToggleBtn.addEventListener('click', openSidebar);
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+            sidebarLinks.forEach(link => link.addEventListener('click', closeSidebar));
+
+            // --- MENU FUNCTIONS ---
+            function renderMenu(filter = 'all') {
+                menuGrid.innerHTML = '';
+                const filteredData = filter === 'all' ? menuData : menuData.filter(item => item.category === filter);
+                
+                filteredData.forEach(item => {
+                    const cardEl = document.createElement('div');
+                    cardEl.className = `card menu-item ${item.category}`;
+                    cardEl.innerHTML = `
+                        <img src="${item.img}" alt="${item.name}" class="w-full h-48 object-cover cursor-pointer" onclick="showDetails(${item.id})" onerror="this.onerror=null;this.src='https://placehold.co/400x300/cccccc/ffffff?text=Imagen+no+disponible';">
+                        <div class="p-5 flex flex-col flex-grow">
+                            <h3 class="font-display text-xl mb-1">${item.name}</h3>
+                            <p class="text-subtle text-sm mb-3">${item.size}</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="font-extrabold text-2xl price-color">$${item.price.toLocaleString('es-CO')}</span>
+                                <div class="flex gap-2">
+                                    <button class="btn-details" onclick="showDetails(${item.id})">Detalles</button>
+                                    <button class="btn-add-to-cart" onclick="addToCart(${item.id})"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    menuGrid.appendChild(cardEl);
+                });
+            }
+
+            // --- CART FUNCTIONS ---
+            window.addToCart = (itemId) => {
+                const itemInCart = cart.find(item => item.id === itemId);
+                if (itemInCart) { itemInCart.quantity++; } 
+                else { const itemToAdd = menuData.find(item => item.id === itemId); cart.push({ ...itemToAdd, quantity: 1 }); }
+                updateCart();
+            };
+            window.changeQuantity = (itemId, change) => {
+                const itemInCart = cart.find(item => item.id === itemId);
+                if (itemInCart) { itemInCart.quantity += change; if (itemInCart.quantity <= 0) { cart = cart.filter(item => item.id !== itemId); } }
+                updateCart();
+            };
+            function updateCart() { renderCartItems(); updateCartTotal(); updateCartCount(); }
+            function renderCartItems() {
+                if (cart.length === 0) {
+                    emptyCartMsg.style.display = 'block'; cartSummary.style.display = 'none';
+                    cartItemsContainer.innerHTML = ''; cartItemsContainer.appendChild(emptyCartMsg);
+                } else {
+                    emptyCartMsg.style.display = 'none'; cartSummary.style.display = 'block';
+                    cartItemsContainer.innerHTML = '';
+                    cart.forEach(item => {
+                        const itemEl = document.createElement('div');
+                        itemEl.className = 'flex justify-between items-center mb-4';
+                        itemEl.innerHTML = `
+                            <div class="flex items-center">
+                                <img src="${item.img}" class="w-16 h-16 object-cover rounded-lg mr-4" onerror="this.onerror=null;this.src='https://placehold.co/100x100/cccccc/ffffff?text=...';">
+                                <div><p class="font-bold">${item.name}</p><p class="text-sm text-subtle">$${item.price.toLocaleString('es-CO')}</p></div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="bg-gray-200 w-6 h-6 rounded-full font-bold" onclick="changeQuantity(${item.id}, -1)">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="bg-gray-200 w-6 h-6 rounded-full font-bold" onclick="changeQuantity(${item.id}, 1)">+</button>
+                            </div>`;
+                        cartItemsContainer.appendChild(itemEl);
+                    });
+                }
+            }
+            function updateCartTotal() {
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                cartTotalEl.textContent = `$${total.toLocaleString('es-CO')}`;
+            }
+            function updateCartCount() {
+                const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+                if (count > 0) { cartCount.textContent = count; cartButton.classList.remove('hidden'); } 
+                else { cartButton.classList.add('hidden'); }
+            }
+
+            // --- MODAL FUNCTIONS ---
+            function openModal(modal) { modal.classList.remove('invisible', 'opacity-0'); modal.querySelector('div.modal-content').classList.remove('scale-95'); }
+            function closeModal(modal) { modal.classList.add('invisible', 'opacity-0'); modal.querySelector('div.modal-content').classList.add('scale-95'); }
+            window.showDetails = (itemId) => {
+                const item = menuData.find(i => i.id === itemId);
+                if (!item) return;
+                detailsContent.innerHTML = `
+                    <img src="${item.img}" alt="${item.name}" class="w-full md:w-1/2 h-64 md:h-auto object-cover rounded-t-2xl md:rounded-l-2xl md:rounded-t-none" onerror="this.onerror=null;this.src='https://placehold.co/400x400/cccccc/ffffff?text=Imagen+no+disponible';">
+                    <div class="p-6 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-3xl mb-2">${item.name}</h3>
+                            <p class="mb-4 text-subtle">${item.description}</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="font-extrabold text-3xl price-color">$${item.price.toLocaleString('es-CO')}</span>
+                            <button class="btn-add-to-cart py-3 px-6" onclick="addToCartFromDetails(${item.id})">Agregar al Carrito</button>
+                        </div>
+                    </div>`;
+                openModal(detailsModal);
+            }
+            window.addToCartFromDetails = (itemId) => { addToCart(itemId); closeModal(detailsModal); }
+
+            // --- EVENT LISTENERS ---
+            cartButton.addEventListener('click', () => openModal(cartModal));
+            closeCartBtn.addEventListener('click', () => closeModal(cartModal));
+            cartModal.addEventListener('click', (e) => { if (e.target === cartModal) closeModal(cartModal); });
+            closeDetailsBtn.addEventListener('click', () => closeModal(detailsModal));
+            detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) closeModal(detailsModal); });
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderMenu(btn.dataset.filter);
+                });
+            });
+            document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+
+            // --- WHATSAPP CHECKOUT LOGIC ---
+            checkoutBtn.addEventListener('click', () => {
+                const name = document.getElementById('customer-name').value.trim();
+                const address = document.getElementById('customer-address').value.trim();
+                const details = document.getElementById('customer-details').value.trim();
+
+                if (cart.length === 0) { console.error('El carrito está vacío.'); return; }
+                if (!name || !address) { console.error('Por favor, ingresa tu nombre y dirección.'); return; }
+
+                let message = `¡Hola Mi Chagrita! 👋 Quiero hacer un pedido:\n\n`;
+                cart.forEach(item => {
+                    message += `*${item.quantity}x* ${item.name} - $${(item.price * item.quantity).toLocaleString('es-CO')}\n`;
+                });
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                message += `\n*Total del Pedido: $${total.toLocaleString('es-CO')}*\n\n`;
+                message += `--- Mis Datos ---\n`;
+                message += `*Nombre:* ${name}\n`;
+                message += `*Dirección:* ${address}\n`;
+                if(details) {
+                    message += `*Detalles:* ${details}\n`;
+                }
+                message += `\n¡Quedo atento a la confirmación! 😊`;
+
+                const whatsappNumber = '573208441327';
+                const whatsappURL = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;
+                window.open(whatsappURL, '_blank');
+            });
+
+            // --- INITIALIZATION ---
+            document.getElementById('year').textContent = new Date().getFullYear();
+            renderMenu();
+            updateCart();
+        });
+    </script>
+
+</body>
+</html>
