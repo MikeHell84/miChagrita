@@ -174,6 +174,21 @@
         .modal-input:focus {
             --tw-ring-color: var(--accent-color);
         }
+        .payment-option div {
+            transition: all 0.2s ease-in-out;
+            border-color: var(--text-subtle);
+        }
+        .payment-option input:checked + div {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-hover);
+            transform: scale(1.05);
+        }
+        #payment-options.error {
+            border: 1px solid #ef4444;
+            border-radius: 0.5rem;
+            padding: 2px;
+        }
 
         .modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
         .menu-item { animation: fadeIn 0.5s ease-in-out forwards; }
@@ -296,7 +311,7 @@
         <i class="fas fa-shopping-cart text-2xl"></i>
         <span id="cart-count" class="cart-count">0</span>
     </div>
-    <a id="whatsapp-chat-button" href="https://api.whatsapp.com/send?phone=573208441327&text=Hola,%20quisiera%20hacer%20un%20pedido." target="_blank" class="floating-btn">
+    <a id="whatsapp-chat-button" href="https://api.whatsapp.com/send?phone=573208441327&text=Hola,%20quisiera%20hacer%20una%20consulta." target="_blank" class="floating-btn">
         <i class="fab fa-whatsapp text-3xl"></i>
     </a>
 
@@ -320,6 +335,25 @@
                     <input type="text" id="customer-name" placeholder="Tu Nombre" class="modal-input w-full p-2 border rounded-lg focus:ring-2 outline-none">
                     <input type="text" id="customer-address" placeholder="Tu Dirección de Entrega" class="modal-input w-full p-2 border rounded-lg focus:ring-2 outline-none">
                     <textarea id="customer-details" placeholder="Detalles de entrega (casa, apto, conjunto, etc.)" rows="2" class="modal-input w-full p-2 border rounded-lg focus:ring-2 outline-none"></textarea>
+                </div>
+                <div class="mt-4">
+                    <p class="text-sm font-semibold mb-2">Elige tu método de pago</p>
+                    <div id="payment-options" class="grid grid-cols-2 gap-2">
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="Efectivo" class="hidden">
+                            <div class="p-2 border rounded-lg text-center cursor-pointer">
+                                <i class="fas fa-money-bill-wave text-xl mb-1"></i>
+                                <span class="text-xs font-semibold">Efectivo</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="Nequi/Daviplata" class="hidden">
+                            <div class="p-2 border rounded-lg text-center cursor-pointer">
+                                <i class="fas fa-mobile-alt text-xl mb-1"></i>
+                                <span class="text-xs font-semibold">Nequi/Daviplata</span>
+                            </div>
+                        </label>
+                    </div>
                 </div>
                 <div id="checkout-error" class="text-red-500 text-sm mt-2 text-center hidden"></div>
                 <button id="checkout-btn" class="w-full btn-primary mt-4 text-lg">
@@ -529,16 +563,19 @@
             // --- WHATSAPP CHECKOUT LOGIC ---
             const nameInput = document.getElementById('customer-name');
             const addressInput = document.getElementById('customer-address');
+            const paymentOptions = document.getElementById('payment-options');
             const errorDiv = document.getElementById('checkout-error');
 
             checkoutBtn.addEventListener('click', () => {
                 const name = nameInput.value.trim();
                 const address = addressInput.value.trim();
                 const details = document.getElementById('customer-details').value.trim();
+                const selectedPayment = document.querySelector('input[name="payment"]:checked');
 
                 // Reset previous errors
                 nameInput.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
                 addressInput.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                paymentOptions.classList.remove('error');
                 errorDiv.classList.add('hidden');
 
                 if (cart.length === 0) { return; }
@@ -550,6 +587,10 @@
                 }
                 if (!address) {
                     addressInput.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+                    isValid = false;
+                }
+                if (!selectedPayment) {
+                    paymentOptions.classList.add('error');
                     isValid = false;
                 }
 
@@ -571,7 +612,8 @@
                 if(details) {
                     message += `*Detalles:* ${details}\n`;
                 }
-                message += `\n¡Quedo atento a la confirmación! 😊`;
+                message += `*Método de Pago:* ${selectedPayment.value}\n\n`;
+                message += `¡Quedo atento a la confirmación! 😊`;
 
                 const whatsappNumber = '573208441327';
                 const whatsappURL = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;
@@ -583,10 +625,17 @@
                     if (input.value.trim() !== '') {
                         input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
                     }
-                    if(nameInput.value.trim() !== '' && addressInput.value.trim() !== '') {
+                    if(nameInput.value.trim() !== '' && addressInput.value.trim() !== '' && document.querySelector('input[name="payment"]:checked')) {
                         errorDiv.classList.add('hidden');
                     }
                 });
+            });
+            
+            paymentOptions.addEventListener('change', () => {
+                paymentOptions.classList.remove('error');
+                 if(nameInput.value.trim() !== '' && addressInput.value.trim() !== '') {
+                    errorDiv.classList.add('hidden');
+                }
             });
 
             // --- INITIALIZATION ---
