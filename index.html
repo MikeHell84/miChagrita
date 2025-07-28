@@ -321,6 +321,7 @@
                     <input type="text" id="customer-address" placeholder="Tu Dirección de Entrega" class="modal-input w-full p-2 border rounded-lg focus:ring-2 outline-none">
                     <textarea id="customer-details" placeholder="Detalles de entrega (casa, apto, conjunto, etc.)" rows="2" class="modal-input w-full p-2 border rounded-lg focus:ring-2 outline-none"></textarea>
                 </div>
+                <div id="checkout-error" class="text-red-500 text-sm mt-2 text-center hidden"></div>
                 <button id="checkout-btn" class="w-full btn-primary mt-4 text-lg">
                     <i class="fab fa-whatsapp mr-2"></i> Pedir por WhatsApp
                 </button>
@@ -526,13 +527,37 @@
             document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
 
             // --- WHATSAPP CHECKOUT LOGIC ---
+            const nameInput = document.getElementById('customer-name');
+            const addressInput = document.getElementById('customer-address');
+            const errorDiv = document.getElementById('checkout-error');
+
             checkoutBtn.addEventListener('click', () => {
-                const name = document.getElementById('customer-name').value.trim();
-                const address = document.getElementById('customer-address').value.trim();
+                const name = nameInput.value.trim();
+                const address = addressInput.value.trim();
                 const details = document.getElementById('customer-details').value.trim();
 
-                if (cart.length === 0) { console.error('El carrito está vacío.'); return; }
-                if (!name || !address) { console.error('Por favor, ingresa tu nombre y dirección.'); return; }
+                // Reset previous errors
+                nameInput.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                addressInput.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                errorDiv.classList.add('hidden');
+
+                if (cart.length === 0) { return; }
+
+                let isValid = true;
+                if (!name) {
+                    nameInput.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+                    isValid = false;
+                }
+                if (!address) {
+                    addressInput.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    errorDiv.textContent = 'Por favor, completa los campos resaltados.';
+                    errorDiv.classList.remove('hidden');
+                    return;
+                }
 
                 let message = `¡Hola Mi Chagrita! 👋 Quiero hacer un pedido:\n\n`;
                 cart.forEach(item => {
@@ -551,6 +576,17 @@
                 const whatsappNumber = '573208441327';
                 const whatsappURL = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;
                 window.open(whatsappURL, '_blank');
+            });
+            
+            [nameInput, addressInput].forEach(input => {
+                input.addEventListener('input', () => {
+                    if (input.value.trim() !== '') {
+                        input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                    }
+                    if(nameInput.value.trim() !== '' && addressInput.value.trim() !== '') {
+                        errorDiv.classList.add('hidden');
+                    }
+                });
             });
 
             // --- INITIALIZATION ---
