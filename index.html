@@ -223,7 +223,7 @@
     <header id="home" class="text-white">
         <div id="hero-gallery">
             <div class="hero-slide active" style="background-image: url('images/MiChagritaBack.png');"></div>
-            <div class="hero-slide" style="background-image: url('images/pizza1.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('images/pizza1.png');"></div>
             <div class="hero-slide" style="background-image: url('images/pizza2.jpg');"></div>
             <div class="hero-slide" style="background-image: url('images/pizza3.jpg');"></div>
             <div class="hero-slide" style="background-image: url('images/pizza4.jpg');"></div>
@@ -366,17 +366,17 @@
 
             // --- MENU DATA ---
             const menuData = [
-                { id: 1, name: 'Pizza Hawaiana', price: 20000, category: 'pizzas', size: 'Personal (22cm)', img: 'images/pizzaHawai.jpg', description: 'La clásica y controversial pizza con jamón y piña. ¡Atrévete a probarla!' },
-                { id: 2, name: 'Pizza Pollo Champiñón', price: 38000, category: 'pizzas', size: 'Mediana (30cm)', img: 'images/pizzaChamp.jpg', description: 'Una combinación perfecta de pollo desmechado y champiñones frescos sobre una base de salsa napolitana y queso mozzarella.' },
-                { id: 3, name: 'Pizza de Carnes', price: 48000, category: 'pizzas', size: 'Familiar (40cm)', img: 'images/pizzaCarnes.jpg', description: 'Para los amantes de la carne: pepperoni, salami, chorizo y tocineta. ¡Una explosión de sabor!' },
-                { id: 4, name: 'Pizza Mexicana', price: 50000, category: 'pizzas', size: 'Familiar (40cm)', img: 'images/pizzaMex.jpg', description: 'Un toque picante con carne molida, jalapeños, aguacate, pico de gallo y nachos. ¡Viva México!' },
-                { id: 5, name: 'Hamburguesa Clásica', price: 25000, category: 'hamburguesas', size: 'En combo', img: 'images/hamburguesaClasica.jpg', description: 'Carne de res artesanal, lechuga, tomate, cebolla y nuestras salsas especiales. Acompañada de papas a la francesa.' },
-                { id: 6, name: 'Hamburguesa con Tocineta', price: 28000, category: 'hamburguesas', size: 'Con aderezos especiales', img: 'images/hamburguesatocineta.jpg', description: 'Nuestra hamburguesa clásica con una generosa porción de tocineta ahumada y queso cheddar.' },
-                { id: 7, name: 'Perro Caliente Clásico', price: 20000, category: 'perros', size: 'Sencillo', img: 'images/perroCalineteClasico.jpg', description: 'Salchicha americana, pan suave, papas trituradas y las salsas que más te gustan.' },
-                { id: 8, name: 'Perro Mexicano', price: 30000, category: 'perros', size: 'Con todo', img: 'images/hotdogMex.jpg', description: 'Un perro caliente con guacamole, pico de gallo, jalapeños y carne desmechada. ¡Una locura de sabor!' },
+                { id: 1, name: 'Pizza Hawaiana', price: 20000, category: 'pizzas', size: 'Personal (22cm)', img: 'images/pizzaHawai.png', description: 'La clásica y controversial pizza con jamón y piña. ¡Atrévete a probarla!' },
+                { id: 2, name: 'Pizza Pollo Champiñón', price: 38000, category: 'pizzas', size: 'Mediana (30cm)', img: 'images/pizzaChamp.png', description: 'Una combinación perfecta de pollo desmechado y champiñones frescos sobre una base de salsa napolitana y queso mozzarella.' },
+                { id: 3, name: 'Pizza de Carnes', price: 48000, category: 'pizzas', size: 'Familiar (40cm)', img: 'images/pizzaCarnes.png', description: 'Para los amantes de la carne: pepperoni, salami, chorizo y tocineta. ¡Una explosión de sabor!' },
+                { id: 4, name: 'Pizza Mexicana', price: 50000, category: 'pizzas', size: 'Familiar (40cm)', img: 'images/pizzaMex.png', description: 'Un toque picante con carne molida, jalapeños, aguacate, pico de gallo y nachos. ¡Viva México!' },
+                { id: 5, name: 'Hamburguesa Clásica', price: 25000, category: 'hamburguesas', size: 'En combo', img: 'images/hamburguesaClasica.png', description: 'Carne de res artesanal, lechuga, tomate, cebolla y nuestras salsas especiales. Acompañada de papas a la francesa.' },
+                { id: 6, name: 'Hamburguesa con Tocineta', price: 28000, category: 'hamburguesas', size: 'Con aderezos especiales', img: 'images/hamburguesatocineta.png', description: 'Nuestra hamburguesa clásica con una generosa porción de tocineta ahumada y queso cheddar.' },
+                { id: 7, name: 'Perro Caliente Clásico', price: 20000, category: 'perros', size: 'Sencillo', img: 'images/perroCalineteClasico.png', description: 'Salchicha americana, pan suave, papas trituradas y las salsas que más te gustan.' },
+                { id: 8, name: 'Perro Mexicano', price: 30000, category: 'perros', size: 'Con todo', img: 'images/hotdogMex.png', description: 'Un perro caliente con guacamole, pico de gallo, jalapeños y carne desmechada. ¡Una locura de sabor!' },
                 { id: 9, name: 'Salchipapa Sencilla', price: 17000, category: 'otros', size: 'Personal', img: 'images/salchipapas.png', description: 'Papas a la francesa con salchicha en rodajas, acompañadas de salsa rosada y de piña.' },
-                { id: 10, name: 'Tacos x3', price: 20000, category: 'otros', size: '3 unidades', img: 'images/tacos.jpg', description: 'Tres tortillas de maíz rellenas de carne, pollo o mixtas, con cebolla y cilantro.' },
-                { id: 11, name: 'Dorilocos Personales', price: 20000, category: 'otros', size: 'Bolognesa y pico de gallo', img: 'images/dorilocos.jpg', description: 'Una base de Doritos con nuestra salsa bolognesa casera, queso, pico de gallo y un toque de limón.' },
+                { id: 10, name: 'Tacos x3', price: 20000, category: 'otros', size: '3 unidades', img: 'images/tacos.png', description: 'Tres tortillas de maíz rellenas de carne, pollo o mixtas, con cebolla y cilantro.' },
+                { id: 11, name: 'Dorilocos Personales', price: 20000, category: 'otros', size: 'Bolognesa y pico de gallo', img: 'images/dorilocos.png', description: 'Una base de Doritos con nuestra salsa bolognesa casera, queso, pico de gallo y un toque de limón.' },
             ];
 
             const menuGrid = document.getElementById('menu-grid');
